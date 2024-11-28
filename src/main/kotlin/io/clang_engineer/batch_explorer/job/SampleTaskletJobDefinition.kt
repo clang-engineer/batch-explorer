@@ -11,9 +11,9 @@ import org.springframework.stereotype.Component
 import org.springframework.transaction.PlatformTransactionManager
 
 @Component
-class SampleJob {
+class SampleTaskletJobDefinition {
     @Bean
-    fun sampleJob(jobRepository: JobRepository, sampleStep: Step): Job {
+    fun sampleTaskletJob(jobRepository: JobRepository, sampleStep: Step): Job {
         return JobBuilder("sample-job", jobRepository).start(sampleStep).build()
     }
 

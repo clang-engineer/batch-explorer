@@ -10,9 +10,9 @@ import org.springframework.stereotype.Component
 @Component
 class BatchJobRunner(private val jobLauncher: JobLauncher) {
     @Bean
-    fun runJob(sampleJob: Job): CommandLineRunner {
+    fun runJob(sampleTaskletJob: Job): CommandLineRunner {
         return CommandLineRunner {
-            jobLauncher.run(sampleJob, JobParametersBuilder().toJobParameters())
+            jobLauncher.run(sampleTaskletJob, JobParametersBuilder().toJobParameters())
         }
     }
 }
