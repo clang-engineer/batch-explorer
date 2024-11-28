@@ -10,16 +10,4 @@ import javax.sql.DataSource
 
 @Configuration
 @EnableBatchProcessing
-class BatchConfiguration {
-  @Bean
-  fun batchSchemaInitializer(dataSource: DataSource): DataSourceInitializer {
-    val initializer = DataSourceInitializer()
-    initializer.setDataSource(dataSource)
-
-    val populator = ResourceDatabasePopulator()
-    populator.addScript(ClassPathResource("org/springframework/batch/core/schema-h2.sql"))
-
-    initializer.setDatabasePopulator(populator)
-    return initializer
-  }
-}
+class BatchConfiguration
