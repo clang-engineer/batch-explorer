@@ -37,15 +37,15 @@ class BatchControlService(
         log.info("Restarting job execution: $jobExecutionId")
 
         val jobExecution = jobExplorer.getJobExecution(jobExecutionId)
-
-        if (jobExecution !== null && jobExecution.status == BatchStatus.FAILED) {
-            val jobName = jobExecution.jobInstance.jobName
-
-            val job = jobRegistry.getJob(jobName)
-
-            val jobParameters = jobExecution.jobParameters
-
-            jobLauncher.run(job, jobParameters)
+        if (jobExecution?.status == BatchStatus.FAILED) {
+            try {
+                jobOperator.restart(jobExecutionId)
+                log.info("JobExecution $jobExecutionId has been restarted.")
+            } catch (e: Exception) {
+                log.error("Failed to restart job execution: $jobExecutionId", e)
+            }
+        } else {
+            log.info("JobExecution $jobExecutionId is not in a failed state.")
         }
     }
 }
