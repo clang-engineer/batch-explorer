@@ -7,9 +7,9 @@ spring:
     driverClassName: org.h2.Driver
     username: sa
     password:
-  #  h2:
-#    console:
-#      enabled: true
   batch:
     jdbc:
       initialize-schema: always
+  h2:
+    console:
+      enabled: true
