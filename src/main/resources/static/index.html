@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<div id="job-instances"></div>
+<div id="job-executions"></div>
+<div id="job-steps"></div>
+</body>
+</html>
+<script type="text/javascript">
+  fetch('api/job/instances')
+  .then(response => response.json())
+  .then(data => {
+    const jobInstances = document.getElementById('job-instances');
+    jobInstances.innerHTML = JSON.stringify(data, null, 2);
+  });
+
+  fetch('api/job/executions')
+  .then(response => response.json())
+  .then(data => {
+    const jobExecutions = document.getElementById('job-executions');
+    jobExecutions.innerHTML = JSON.stringify(data, null, 2);
+  });
+
+  fetch('api/job/steps')
+  .then(response => response.json())
+  .then(data => {
+    const jobSteps = document.getElementById('job-steps');
+    jobSteps.innerHTML = JSON.stringify(data, null, 2);
+  });
+</script>
