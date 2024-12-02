@@ -3,6 +3,8 @@ package io.clang_engineer.batch_explorer.job
 import org.quartz.JobExecutionContext
 import org.springframework.batch.core.Job
 import org.springframework.batch.core.Step
+import org.springframework.batch.core.configuration.JobRegistry
+import org.springframework.batch.core.configuration.support.ReferenceJobFactory
 import org.springframework.batch.core.job.builder.JobBuilder
 import org.springframework.batch.core.launch.JobLauncher
 import org.springframework.batch.core.repository.JobRepository
@@ -16,20 +18,35 @@ class QuartzJob(
         private val jobLauncher: JobLauncher,
         private val jobRepository: JobRepository,
         private val transactionManager: PlatformTransactionManager,
+        private val jobRegistry: JobRegistry,
 ) : org.quartz.Job {
+    private val JOB_NAME = "batch-explorer-job"
+    private val STEP_NAME = "batch-explorer-step"
+
     override fun execute(context: JobExecutionContext?) {
         val jobDataMap = context?.jobDetail?.jobDataMap as org.quartz.JobDataMap
         val jobParameters = transformQuartzJobDataMapToBatchJobParameters(jobDataMap)
+
+        var job: Job? = try {
+            jobRegistry.getJob(JOB_NAME)
+        } catch (e: org.springframework.batch.core.launch.NoSuchJobException) {
+            null
+        }
+
+        if (job == null) {
+            job = job()
+            jobRegistry.register(ReferenceJobFactory(job))
+        }
 
         jobLauncher.run(job(), jobParameters)
     }
 
     fun job(): Job {
-        return JobBuilder("batch-explorer-job", jobRepository).start(step()).build()
+        return JobBuilder(JOB_NAME, jobRepository).start(step()).build()
     }
 
     fun step(): Step {
-        return StepBuilder("batch-explorer-step", jobRepository).tasklet(tasklet(), transactionManager).build()
+        return StepBuilder(STEP_NAME, jobRepository).tasklet(tasklet(), transactionManager).build()
     }
 
     fun tasklet(): Tasklet {
