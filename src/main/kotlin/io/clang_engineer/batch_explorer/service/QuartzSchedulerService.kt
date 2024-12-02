@@ -4,27 +4,23 @@ import io.clang_engineer.batch_explorer.job.QuartzJob
 import org.quartz.JobDataMap
 import org.quartz.Scheduler
 import org.springframework.stereotype.Component
-import java.util.UUID
-import java.util.concurrent.atomic.AtomicInteger
+import java.util.*
 
 @Component
 class QuartzSchedulerService(private val scheduler: Scheduler) {
-    fun scheduleBatchJobExecution() {
-        val jobDetail = org.quartz.JobBuilder.newJob(QuartzJob::class.java)
-                .withIdentity("${UUID.randomUUID()}", "jobs")
-                .usingJobData(JobDataMap().apply {
-                    put("paramaA", "valueA")
-                    put("paramaB", "valueB")
-                })
-                .storeDurably()
-                .build()
+  fun scheduleBatchJobExecution(cronExpression: String, jobDataMap: Map<String, String>) {
+    val jobDetail = org.quartz.JobBuilder.newJob(QuartzJob::class.java)
+      .withIdentity("${UUID.randomUUID()}", "jobs")
+      .usingJobData(JobDataMap(jobDataMap))
+      .storeDurably()
+      .build()
 
-        val trigger = org.quartz.TriggerBuilder.newTrigger()
-                .forJob(jobDetail)
-                .withIdentity("${UUID.randomUUID()}", "triggers")
-                .withSchedule(org.quartz.CronScheduleBuilder.cronSchedule("0/5 * * * * ?"))
-                .build()
+    val trigger = org.quartz.TriggerBuilder.newTrigger()
+      .forJob(jobDetail)
+      .withIdentity("${UUID.randomUUID()}", "triggers")
+      .withSchedule(org.quartz.CronScheduleBuilder.cronSchedule(cronExpression))
+      .build()
 
-        scheduler.scheduleJob(jobDetail, trigger)
-    }
+    scheduler.scheduleJob(jobDetail, trigger)
+  }
 }

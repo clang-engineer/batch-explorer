@@ -5,6 +5,15 @@
   <title>Title</title>
 </head>
 <body>
+<div>
+  <form>
+    <input type="text" id="job-name" placeholder="job name">
+    <input type="text" id="cron-expression" placeholder="cron expression" value="0/5 * * * * ?">
+    <button onclick="onSubmit(event)">
+      schedule
+    </button>
+  </form>
+</div>
 <div id="job-instances"></div>
 <div>
   <div>title: job execution list</div>
@@ -66,4 +75,20 @@
 
   });
 
+  const onSubmit = (e) => {
+    e.preventDefault();
+    fetch('api/quartz/schedule', {
+      method: 'POST',
+      body: JSON.stringify({
+        cronExpression: document.getElementById('cron-expression').value,
+        jobDataMap: {
+          key1: 'value1',
+          key2: 'value2'
+        }
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+  }
 </script>
