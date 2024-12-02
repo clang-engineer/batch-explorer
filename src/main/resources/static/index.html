@@ -6,29 +6,42 @@
 </head>
 <body>
 <div id="job-instances"></div>
-<div id="job-executions"></div>
+<div>
+  <div>title: job execution list</div>
+  <div id="job-executions" style="display: flex; flex-wrap: wrap;"></div>
+</div>
 <div id="job-steps"></div>
 </body>
 </html>
 <script type="text/javascript">
-  fetch('api/job/instances')
-  .then(response => response.json())
-  .then(data => {
-    const jobInstances = document.getElementById('job-instances');
-    jobInstances.innerHTML = JSON.stringify(data, null, 2);
-  });
-
   fetch('api/job/executions')
   .then(response => response.json())
   .then(data => {
     const jobExecutions = document.getElementById('job-executions');
-    jobExecutions.innerHTML = JSON.stringify(data, null, 2);
+
+    for (let i = 0; i < data.length; i++) {
+      const jobExecution = data[i];
+      const jobExecutionElement = document.createElement('div');
+      jobExecutionElement.setAttribute('style', 'border: 1px solid black; margin: 10px; padding: 10px;');
+
+      jobExecutionElement.innerHTML = `
+        <div>id: ${jobExecution.id}</div>
+        <div>jobName: ${jobExecution.jobName}</div>
+        <div>status: ${jobExecution.status}</div>
+        <div>startTime: ${jobExecution.startTime}</div>
+        <div>endTime: ${jobExecution.endTime}</div>
+        <div>exitCode: ${jobExecution.exitCode}</div>
+        <div>exitDescription: ${jobExecution.exitDescription}</div>
+        <div>lastUpdated: ${jobExecution.lastUpdated}</div>
+        <div style="display: flex; justify-content: flex-end; gap: 5px; margin-top: 10px;">
+        <button onclick="fetch('api/job/executions/${jobExecution.id}/stop', {method: 'POST'})">stop</button>
+        <button onclick="fetch('api/job/executions/${jobExecution.id}/restart', {method: 'POST'})">restart</button>
+        <button onclick="fetch('api/job/executions/${jobExecution.id}', {method: 'DELETE'})">delete</button>
+        </div>
+      `;
+      jobExecutions.prepend(jobExecutionElement);
+    }
+
   });
 
-  fetch('api/job/steps')
-  .then(response => response.json())
-  .then(data => {
-    const jobSteps = document.getElementById('job-steps');
-    jobSteps.innerHTML = JSON.stringify(data, null, 2);
-  });
 </script>
