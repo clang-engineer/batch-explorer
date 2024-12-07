@@ -1,0 +1,18 @@
+.row {
+  display: flex;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.row > .col-4 {
+  flex-basis: 25%;
+  flex-grow: 0; /* 항목 크기 증가하지 않음 */
+  flex-shrink: 0; /* 항목 크기 축소하지 않음 */
+}
+
+.button-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: 5px;
+  margin-top: 10px;
+}

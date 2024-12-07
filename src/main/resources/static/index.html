@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
+  <link rel="stylesheet" href="index.css" />
 </head>
 <body>
 <div>
@@ -22,26 +23,6 @@
 <div id="job-steps"></div>
 </body>
 </html>
-<style>
-  .row {
-    display: flex;
-    margin-bottom: 10px;
-    flex-wrap: wrap;
-  }
-
-  .row > .col-4 {
-    flex-basis: 25%;
-    flex-grow: 0; /* 항목 크기 증가하지 않음 */
-    flex-shrink: 0; /* 항목 크기 축소하지 않음 */
-  }
-
-  .button-group {
-    display: flex;
-    justify-content: flex-end;
-    gap: 5px;
-    margin-top: 10px;
-  }
-</style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script src="./execution-init.js"></script>
