@@ -71,11 +71,17 @@
   const stompClient = Stomp.over(socket);
 
   stompClient.connect({}, function (frame) {
-    console.log('Connected: ' + frame);
-
     stompClient.subscribe('/topic/batch-status', function (message) {
-      const status = JSON.parse(message.body);
-      document.getElementById('batch-status').innerText = status;
+      const jobExecutions = document.getElementById('job-executions');
+      const jobExecution = JSON.parse(message.body);
+
+      const founded = jobExecutions.querySelector(`[data-id="${jobExecution.id}"]`);
+
+      if (founded) {
+        founded.replaceWith(createExecutionElement(jobExecution));
+      } else {
+        jobExecutions.appendChild(createExecutionElement(jobExecution));
+      }
     });
   });
 </script>

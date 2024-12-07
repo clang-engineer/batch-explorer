@@ -59,16 +59,36 @@ class BatchConfiguration(
             override fun beforeJob(jobExecution: org.springframework.batch.core.JobExecution) {
                 log.debug("Before job execution: ${jobExecution.jobInstance.jobName}")
 
-                val message = "Job ${jobExecution.jobInstance.jobName} started at ${java.time.LocalDateTime.now()}"
-                websocketMessageTemplate.convertAndSend("/topic/batch-status", message)
+                val jobExecutionDTO = io.clang_engineer.batch_explorer.service.dto.JobExecutionDTO(
+                        id = jobExecution.id,
+                        jobName = jobExecution.jobInstance.jobName,
+                        status = jobExecution.status.name,
+                        startTime = jobExecution.startTime,
+                        endTime = jobExecution.endTime,
+                        exitCode = jobExecution.exitStatus.exitCode,
+                        exitDescription = jobExecution.exitStatus.exitDescription,
+                        lastUpdated = jobExecution.lastUpdated,
+                        stepExecutions = null
+                )
+                websocketMessageTemplate.convertAndSend("/topic/batch-status", jobExecutionDTO)
             }
 
             override fun afterJob(jobExecution: org.springframework.batch.core.JobExecution) {
                 log.debug("After job execution: ${jobExecution.jobInstance.jobName}")
 
-                val message = "Job ${jobExecution.jobInstance.jobName} finished at ${java.time.LocalDateTime.now()}"
+                val jobExecutionDTO = io.clang_engineer.batch_explorer.service.dto.JobExecutionDTO(
+                        id = jobExecution.id,
+                        jobName = jobExecution.jobInstance.jobName,
+                        status = jobExecution.status.name,
+                        startTime = jobExecution.startTime,
+                        endTime = jobExecution.endTime,
+                        exitCode = jobExecution.exitStatus.exitCode,
+                        exitDescription = jobExecution.exitStatus.exitDescription,
+                        lastUpdated = jobExecution.lastUpdated,
+                        stepExecutions = null
+                )
 
-                websocketMessageTemplate.convertAndSend("/topic/batch-status", message)
+                websocketMessageTemplate.convertAndSend("/topic/batch-status", jobExecutionDTO)
             }
         }
     }

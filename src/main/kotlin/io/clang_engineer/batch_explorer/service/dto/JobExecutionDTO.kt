@@ -11,6 +11,6 @@ data class JobExecutionDTO(
   val exitCode: String,
   val exitDescription: String,
   val lastUpdated: LocalDateTime?,
-  val stepExecutions: List<StepExecutionDTO>,
+  val stepExecutions: List<StepExecutionDTO>?,
 )
 

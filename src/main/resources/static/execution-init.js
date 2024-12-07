@@ -15,7 +15,7 @@ const createExecutionElement = (execution) => {
   jobExecutionElement.setAttribute('class', 'col-4')
 
   jobExecutionElement.innerHTML = `
-      <div style="border: 1px solid black; padding: 10px; margin: 10px;">
+      <div data-id="${execution.id}" style="border: 1px solid black; padding: 10px; margin: 10px;">
         <div>id: ${execution.id}</div>
         <div>jobName: ${execution.jobName}</div>
         <div>status: ${execution.status}</div>
