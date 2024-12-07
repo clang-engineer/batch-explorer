@@ -14,7 +14,7 @@
     </button>
   </form>
 </div>
-<div id="job-instances"></div>
+<div id="batch-status">Waiting for updates...</div>
 <div>
   <div>title: job execution list</div>
   <div id="job-executions" class="row"></div>
@@ -42,38 +42,11 @@
     margin-top: 10px;
   }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script src="./execution-init.js"></script>
 <script type="text/javascript">
-  fetch('api/job/executions')
-  .then(response => response.json())
-  .then(data => {
-    const jobExecutions = document.getElementById('job-executions');
-
-    for (let i = 0; i < data.length; i++) {
-      const jobExecution = data[i];
-      const jobExecutionElement = document.createElement('div');
-      jobExecutionElement.setAttribute('class', 'col-4')
-
-      jobExecutionElement.innerHTML = `
-      <div style="border: 1px solid black; padding: 10px; margin: 10px;">
-        <div>id: ${jobExecution.id}</div>
-        <div>jobName: ${jobExecution.jobName}</div>
-        <div>status: ${jobExecution.status}</div>
-        <div>startTime: ${jobExecution.startTime}</div>
-        <div>endTime: ${jobExecution.endTime}</div>
-        <div>exitCode: ${jobExecution.exitCode}</div>
-        <div>exitDescription: ${jobExecution.exitDescription}</div>
-        <div>lastUpdated: ${jobExecution.lastUpdated}</div>
-        <div class="button-group">
-        <button onclick="fetch('api/job/executions/${jobExecution.id}/stop', {method: 'POST'})">stop</button>
-        <button onclick="fetch('api/job/executions/${jobExecution.id}/restart', {method: 'POST'})">restart</button>
-        <button onclick="fetch('api/job/executions/${jobExecution.id}', {method: 'DELETE'})">delete</button>
-        </div>
-      </div>
-      `;
-      jobExecutions.prepend(jobExecutionElement);
-    }
-
-  });
+  initExecutions();
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -91,4 +64,18 @@
       }
     })
   }
+</script>
+
+<script>
+  const socket = new SockJS('/websocket/tracker');
+  const stompClient = Stomp.over(socket);
+
+  stompClient.connect({}, function (frame) {
+    console.log('Connected: ' + frame);
+
+    stompClient.subscribe('/topic/batch-status', function (message) {
+      const status = JSON.parse(message.body);
+      document.getElementById('batch-status').innerText = status;
+    });
+  });
 </script>
