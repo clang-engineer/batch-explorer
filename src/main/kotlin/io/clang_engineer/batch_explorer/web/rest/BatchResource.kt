@@ -1,4 +1,4 @@
-package io.clang_engineer.batch_explorer.web
+package io.clang_engineer.batch_explorer.web.rest
 
 import io.clang_engineer.batch_explorer.service.BatchExecutionService
 import io.clang_engineer.batch_explorer.service.dto.JobExecutionDTO
