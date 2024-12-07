@@ -12,7 +12,7 @@ class WebsocketConfiguration : WebSocketMessageBrokerConfigurer {
     // 클라이언트가 웹소켓 서버에 연결하는데 사용할 웹소켓 엔드포인트를 등록합니다.
     override fun registerStompEndpoints(registry: StompEndpointRegistry) {
         registry.addEndpoint("/websocket/tracker")
-            .setAllowedOrigins("*")
+            .setAllowedOrigins("http://localhost:8080")
             .withSockJS()
     }
 
