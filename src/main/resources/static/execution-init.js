@@ -1,5 +1,5 @@
 const initExecutions = () => {
-  fetch('api/job/executions')
+  return fetch('api/job/executions')
   .then(response => response.json())
   .then(data => {
     const jobExecutions = document.getElementById('job-executions');
