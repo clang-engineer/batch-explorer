@@ -27,7 +27,7 @@ class QuartzResource(
 
     @PostMapping("/pause")
     fun pauseAllJobs(): ResponseEntity<Void> {
-        log.info("Pausing all jobs")
+        log.info("Pausing all quartz jobs")
 
         quartzSchedulerService.pauseAllJobs()
         return ResponseEntity.ok().build()
@@ -35,7 +35,7 @@ class QuartzResource(
 
     @PostMapping("/resume")
     fun resumeAllJobs(): ResponseEntity<Void> {
-        log.info("Resuming all jobs")
+        log.info("Resuming all quartz jobs")
 
         quartzSchedulerService.resumeAllJobs()
         return ResponseEntity.ok().build()
