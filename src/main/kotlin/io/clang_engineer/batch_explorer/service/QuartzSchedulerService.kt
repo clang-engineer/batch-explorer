@@ -23,4 +23,12 @@ class QuartzSchedulerService(private val scheduler: Scheduler) {
 
     scheduler.scheduleJob(jobDetail, trigger)
   }
+
+  fun pauseAllJobs() {
+    scheduler.pauseAll()
+  }
+
+  fun resumeAllJobs() {
+    scheduler.resumeAll()
+  }
 }

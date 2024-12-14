@@ -10,18 +10,35 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/quartz")
 class QuartzResource(
-  private val quartzSchedulerService: QuartzSchedulerService
+        private val quartzSchedulerService: QuartzSchedulerService
 ) {
-  private val log = org.slf4j.LoggerFactory.getLogger(javaClass)
+    private val log = org.slf4j.LoggerFactory.getLogger(javaClass)
 
-  @PostMapping("/schedule")
-  fun scheduleBatchJobExecution(@RequestBody data: Map<String, Any>): ResponseEntity<Void> {
-    log.info("Scheduling batch job execution")
+    @PostMapping("/schedule")
+    fun scheduleBatchJobExecution(@RequestBody data: Map<String, Any>): ResponseEntity<Void> {
+        log.info("Scheduling batch job execution")
 
-    quartzSchedulerService.scheduleBatchJobExecution(
-      data["cronExpression"] as String,
-      data["jobDataMap"] as Map<String, String>
-    )
-    return ResponseEntity.ok().build()
-  }
+        quartzSchedulerService.scheduleBatchJobExecution(
+                data["cronExpression"] as String,
+                data["jobDataMap"] as Map<String, String>
+        )
+        return ResponseEntity.ok().build()
+    }
+
+    @PostMapping("/pause")
+    fun pauseAllJobs(): ResponseEntity<Void> {
+        log.info("Pausing all jobs")
+
+        quartzSchedulerService.pauseAllJobs()
+        return ResponseEntity.ok().build()
+    }
+
+    @PostMapping("/resume")
+    fun resumeAllJobs(): ResponseEntity<Void> {
+        log.info("Resuming all jobs")
+
+        quartzSchedulerService.resumeAllJobs()
+        return ResponseEntity.ok().build()
+    }
+
 }

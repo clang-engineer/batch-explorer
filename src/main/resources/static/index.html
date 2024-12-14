@@ -13,6 +13,12 @@
     <button onclick="onSubmit(event)">
       schedule
     </button>
+    <button type="button" onclick="fetch('api/quartz/pause', { method: 'POST' })">
+      pause all
+    </button>
+    <button type="button" onclick="fetch('api/quartz/resume', { method: 'POST' })">
+      resume all
+    </button>
   </form>
 </div>
 <div id="batch-status">Waiting for updates...</div>
